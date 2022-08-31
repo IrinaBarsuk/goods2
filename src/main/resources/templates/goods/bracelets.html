@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header(~{::title})">
+    <title>Перечень браслетов</title>
+</head>
+<body>
+<div th:replace="fragments/menu::menu(activeTab='allBracelets')"></div>
+<div class="container mt-4">
+    <h3 class="text-center">Перечень браслетов</h3>
+</div>
+<div class="container mt-5">
+    <div class="alert alert-info alert-dismissible fade show" th:if="${goods.isEmpty()}">
+        <span>К сожалению, в выбранной категории нет украшений...</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <table class="table table-hover" th:if="${!goods.isEmpty()}">
+        <thead>
+        <tr>
+            <th class="text-center">№</th>
+            <th class="text-center">Наименование</th>
+            <th class="text-center">Производитель</th>
+            <th class="text-center">Код</th>
+            <th class="text-center">Тип металла</th>
+            <th class="text-center">Цена</th>
+            <th class="text-center">Описание</th>
+            <th class="text-center">Изображение</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="gd, state:${goods}" th:onclick="|window.location.href='@{/goods/view(id=${gd.id})}'|">
+            <td th:text="${state.count}" class="align-middle"></td>
+            <td th:text="${gd.name}" class="align-middle text-center"></td>
+            <td th:text="${gd.manufacturer.name}" class="align-middle"></td>
+            <td th:text="${gd.vendor}" class="align-middle"></td>
+            <td th:text="${gd.metal.type}" class="align-middle"></td>
+            <td th:text="${#numbers.formatDecimal(gd.price, 1, 2, 'COMMA')}" class="align-middle"></td>
+            <td th:text="${gd.description}" class="align-middle text-center"></td>
+            <td><img class="rounded img-thumbnail" th:alt="${gd.name}"
+                     th:src="'data:image/jpeg;base64,' + ${imgUtil.getImgData(gd.getImage())}"/></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:replace="fragments/footer::footer"></div>
+</body>
+</html>

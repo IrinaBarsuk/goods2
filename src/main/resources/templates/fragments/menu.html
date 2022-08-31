@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="ru"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="menu(activeTab)">
+    <a th:href="@{../}" class="navbar-brand"><i class="fa-solid fa-gem"></i> АО "Ювелирные <b>украшения"</b></a>
+    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
+        <form class="navbar-form form-inline search-form" th:action="@{/goods/search}" th:method="get" >
+            <div class="input-group">
+                <input type="text" name='s' class="form-control" placeholder="Поиск...">
+                <span class="input-group-btn">
+					<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+				</span>
+            </div>
+        </form>
+        <div class="navbar-nav">
+            <div class="nav-item dropdown" th:switch="${activeTab}">
+                <a th:case="'allBracelets'" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle" href="#">Браслеты</a>
+                <a th:case="'allRings'" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle" href="#">Кольца</a>
+                <a th:case="'allNecklaces'" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle" href="#">Подвески и колье</a>
+                <a th:case="'allEarrings'" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle"  href="#">Серьги</a>
+                <a th:case="'allSilver'" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle"  href="#">Украшения из серебра</a>
+                <a th:case="'allWhite'" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle"  href="#">Украшения из белого золота</a>
+                <a th:case="'allPink'" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle"  href="#">Украшения из розового золота</a>
+                <a th:case="*" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle" href="#">Все украшения</a>
+                <div class="dropdown-menu">
+                    <a th:class="${activeTab == 'allBracelets'} ? 'dropdown-item active disabled' : 'dropdown-item'" th:href="@{../goods/bracelets}">Браслеты</a>
+                    <a th:class="${activeTab == 'allRings'} ? 'dropdown-item active disabled' : 'dropdown-item'" th:href="@{../goods/rings}">Кольца</a>
+                    <a th:class="${activeTab == 'allNecklaces'} ? 'dropdown-item active disabled' : 'dropdown-item'" th:href="@{../goods/necklaces}">Подвески и колье</a>
+                    <a th:class="${activeTab == 'allEarrings'} ? 'dropdown-item active disabled' : 'dropdown-item'" th:href="@{../goods/earrings}">Серьги</a>
+                    <a th:class="${activeTab == 'allSilver'} ? 'dropdown-item active disabled' : 'dropdown-item'" th:href="@{../goods/silver}">Украшения из серебра</a>
+                    <a th:class="${activeTab == 'allWhite'} ? 'dropdown-item active disabled' : 'dropdown-item'" th:href="@{../goods/white}">Украшения из белого золота</a>
+                    <a th:class="${activeTab == 'allPink'} ? 'dropdown-item active disabled' : 'dropdown-item'" th:href="@{../goods/pink}">Украшения из розового золота</a>
+                    <a th:class="${activeTab == 'allGoods'} ? 'dropdown-item active disabled' : 'dropdown-item'" th:href="@{../goods/all}">Все украшения</a>
+                </div>
+            </div>
+        </div>
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" th:href="@{../manufacturers/all}">Производители</a>
+        </div>
+        <div sec:authorize="isAnonymous()" class="navbar-nav ml-auto">
+            <div class="nav-item dropdown login-dropdown">
+                <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle"><i class="fa fa-user-o"></i> Вход</a>
+                <div class="dropdown-menu">
+                    <form class="form-inline login-form" th:action="@{/login}" method="post">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+								<span class="input-group-text">
+									<span class="fa fa-user"></span>
+								</span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="Username" required id="username"
+                                   name="username">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+								<span class="input-group-text">
+									<i class="fa fa-lock"></i>
+								</span>
+                            </div>
+                            <input type="password" class="form-control" placeholder="Password" required id="password"
+                                   name="password">
+                        </div>
+                        <button type="submit" class="btn btn-small">Вход</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div sec:authorize="isAuthenticated()" class="navbar-nav ml-auto">
+            <a th:if="${activeTab == 'allGoods'} OR ${activeTab == 'viewGoods'} OR ${activeTab == 'editGoods'} OR ${activeTab == 'allBracelets'} OR ${activeTab == 'allRings'} OR ${activeTab == 'allNecklaces'} OR ${activeTab == 'allEarrings'} OR ${activeTab == 'allSilver'} OR ${activeTab == 'allWhite'} OR ${activeTab == 'allPink'} OR ${activeTab == 'search'}"
+               th:href="@{/goods/add}" class="btn">Добавить украшение</a>
+            <a th:if="${activeTab == 'allManufacturers'} OR ${activeTab == 'viewManufacturer'} OR ${activeTab == 'editManufacturer'}"
+               th:href="@{/manufacturers/add}" class="btn">Добавить производителя</a>
+            <div class="nav-item dropdown logout-dropdown">
+                <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle"><i class="fa fa-user-o" th:text="' ' + ${#httpServletRequest.remoteUser}"></i></a>
+                <div class="dropdown-menu">
+                    <form th:action="@{/logout}" method="post">
+                        <input type="submit" class="btn btn-primary" th:value="'Выход (' + ${#httpServletRequest.remoteUser} + ')'"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

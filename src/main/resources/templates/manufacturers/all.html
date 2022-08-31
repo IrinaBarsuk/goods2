@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header(~{::title})">
+    <title>Перечень всех производителей</title>
+</head>
+<body>
+<div th:replace="fragments/menu::menu(activeTab='allManufacturers')"></div>
+<div class="container mt-4" style="padding-bottom: 10px">
+    <h3 class="text-center">Перечень всех производителей</h3>
+</div>
+<div class="container mt-5" style="padding-bottom: 50px">
+    <div class="alert alert-info alert-dismissible fade show" th:if="${manufacturerMessage}">
+        <span th:text="${manufacturerMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div class="alert alert-info alert-dismissible fade show" th:if="${manufacturers.isEmpty()}">
+        <span>К сожалению, производителей пока нет...</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <table class="table table-hover" th:if="${!manufacturers.isEmpty()}">
+        <thead>
+        <tr>
+            <th class="text-center">№</th>
+            <th class="text-center">Наименование</th>
+            <th class="text-center">Страна</th>
+            <th class="text-center">Город</th>
+            <th class="text-center">Адрес</th>
+            <th class="text-center">Телефон</th>
+            <th class="text-center">Email</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="manufacturer, state:${manufacturers}" th:onclick="|window.location.href='@{/manufacturers/view(id=${manufacturer.id})}'|">
+            <td th:text="${state.count}" class="align-middle"></td>
+            <td th:text="${manufacturer.name}" class="align-middle text-center"></td>
+            <td th:text="${manufacturer.country}" class="align-middle"></td>
+            <td th:text="${manufacturer.city}" class="align-middle"></td>
+            <td th:text="${manufacturer.address}" class="align-middle"></td>
+            <td th:text="${manufacturer.phoneNumber}" class="align-middle"></td>
+            <td th:text="${manufacturer.email}" class="align-middle text-center"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:replace="fragments/footer::footer"></div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/header::header(~{::title})">
+    <title>Просмотр украшения</title>
+</head>
+<body>
+<div th:replace="fragments/menu::menu(activeTab='viewGoods')"></div>
+<th:block th:if="${goods}">
+    <div class="container mt-4">
+        <h3 class="text-center" th:text="${goods.name}"></h3>
+    </div>
+    <div class="container mt-5">
+        <div class="alert alert-info alert-dismissible fade show" th:if="${goodsMessage}">
+            <span th:text="${goodsMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div class="container mt-5 text-center">
+            <img class="rounded img-thumbnail" th:alt="${goods.name}"
+                 th:src="'data:image/jpeg;base64,' + ${imgUtil.getImgData(goods.getImage())}"/>
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="text-center">ID</th>
+                <th class="text-center">Наименование</th>
+                <th class="text-center">Категория</th>
+                <th class="text-center">Производитель</th>
+                <th class="text-center">Код</th>
+                <th class="text-center">Тип металла</th>
+                <th class="text-center">Цена</th>
+                <th class="text-center">Описание</th>
+                <th class="text-center" sec:authorize="isAuthenticated()">Действия</th>
+                <th class="text-center" sec:authorize="isAnonymous()">Заказать</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="align-middle" th:text="${goods.id}"></td>
+                <td class="align-middle" th:text="${goods.name}"></td>
+                <td class="align-middle" th:text="${goods.category.name}"></td>
+                <td class="align-middle" th:text="${goods.manufacturer.name}"></td>
+                <td class="align-middle" th:text="${goods.vendor}"></td>
+                <td class="align-middle" th:text="${goods.metal.type}"></td>
+                <td class="align-middle" th:text="${#numbers.formatDecimal(goods.price, 1, 2, 'COMMA')}"></td>
+                <td class="align-middle" th:text="${goods.description}"></td>
+                <td class="align-middle" sec:authorize="isAuthenticated()">
+                    <a class="btn" th:href="@{/goods/edit(id=${goods.id})}"><i class="fa-solid fa-pencil"></i>  Редактировать</a>
+                    <a class="btn" th:href="@{/goods/delete(id=${goods.id})}"><i class="fa-solid fa-eraser"></i>  Удалить</a>
+                </td>
+                <td class="align-middle" sec:authorize="isAnonymous()">
+                    <a th:href="@{/goods/order(id=${goods.id})}" class="btn"><i class="fa-solid fa-bag-shopping"
+                                                               style="color: #29c68c"
+                                                               aria-hidden="true"
+                                                               title="Заказать"></i> Заказать</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</th:block>
+<div th:replace="fragments/footer::footer"></div>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header(~{::title})">
+    <title>Редактирование украшения</title>
+</head>
+<body>
+<div th:replace="fragments/menu::menu(activeTab='editGoods')"></div>
+<div class="container mt-4">
+    <h3 class="text-center">Редактирование украшения</h3>
+</div>
+<div class="container mt-5" style="width: 30%">
+    <div class="alert alert-danger alert-dismissible fade show" th:if="${goodsMessage}">
+        <span th:text="${goodsMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <form method="post" th:action="@{/goods/edit}" th:object="${goods}" enctype="multipart/form-data">
+        <input id="id" th:field="*{id}" type="hidden">
+        <div class="mb-3">
+            <label for="name" class="form-label">Украшение</label>
+            <input type="text" class="form-control" id="name" th:field="*{name}">
+        </div>
+        <div class="alert alert-danger alert-dismissible fade show" th:if="${#fields.hasErrors('name')}">
+            <span th:errors="*{name}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div class="mb-3">
+            <label for="category" th:class="form-label">Категория</label>
+            <select class="form-control" th:field="${goods.category.id}" id="category">
+                <option th:each="category : ${categories}" th:value="${category.id}"
+                        th:text="${category.name}"></option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="manufacturer" th:class="form-label">Производитель</label>
+            <select class="form-control" th:field="${goods.manufacturer.id}" id="manufacturer">
+                <option th:each="manufacturer : ${manufacturers}" th:value="${manufacturer.id}"
+                        th:text="${manufacturer.name}"></option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="vendor" th:class="form-label">Код</label>
+            <input type="text" class="form-control" id="vendor" th:field="*{vendor}">
+        </div>
+        <div class="alert alert-danger alert-dismissible fade show" th:if="${#fields.hasErrors('vendor')}">
+            <span th:errors="*{vendor}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div class="mb-3">
+            <label for="metal" th:class="form-label">Тим металла</label>
+            <select class="form-control" th:field="${goods.metal.id}" id="metal">
+                <option th:each="typeMetal : ${types}" th:value="${typeMetal.id}"
+                        th:text="${typeMetal.type}"></option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <input id="image" th:field="*{image}" type="hidden">
+            <div class="alert alert-info alert-dismissible fade show">
+                <img class="rounded img-thumbnail" th:alt="${goods.name}"
+                     th:src="'data:image/jpeg;base64,' + ${imgUtil.getImgData(goods.getImage())}"/>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            <label for="newImage" th:class="form-label">Изображение</label>
+            <input type="file" class="form-control" id="newImage" name="file" accept=".jpg,.jpeg,.png">
+        </div>
+        <div class="alert alert-info alert-dismissible fade show" th:if="${goodsMessage}">
+            <span th:text="${goodsMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div class="mb-3">
+            <label for="price" class="input-group">Цена</label>
+            <input class="form-control" type="number" id="price" th:field="*{price}" placeholder="10.00" step="0.01"
+                   min="0" max="100000">
+        </div>
+        <div class="alert alert-danger alert-dismissible fade show" th:if="${#fields.hasErrors('price')}">
+            <span th:errors="*{price}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="input-group">Описание</label>
+            <textarea class="form-control" id="description" th:field="*{description}"></textarea>
+        </div>
+        <div class="alert alert-danger alert-dismissible fade show" th:if="${#fields.hasErrors('description')}">
+            <span th:errors="*{description}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <button type="submit" class="btn btn-primary">Сохранить украшение</button>
+        <a class="btn btn-secondary" th:href="@{/goods/view(id=${goods.id})}">Отмена</a>
+    </form>
+</div>
+<div th:replace="fragments/footer::footer"></div>
+</body>
+</html>

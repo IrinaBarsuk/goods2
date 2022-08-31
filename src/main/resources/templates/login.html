@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header(~{::title})">
+    <title>Вход</title>
+</head>
+<body>
+<div th:replace="fragments/menu::menu(activeTab='login')"></div>
+<div class="container"  style="padding-bottom: 100px">>
+    <form th:action="@{/login}" method="post"
+          style="max-width: 350px; margin: 0 auto;">
+        <div class="border border-secondary p-4 rounded">
+            <h1 class="text-center">Вход <i class="fa-solid fa-right-to-bracket"></i></h1>
+            <div class="alert alert-info alert-dismissible fade show" th:if="${param.error}">
+                <span>Неверный логин или пароль</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            <div class="alert alert-info alert-dismissible fade show" th:if="${param.logout}">
+                <span>Вы вышли из системы</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            <div class="form-group" style="padding-top: 20px">
+                <label for="username">Логин:</label>
+                <input type="text" class="form-control" placeholder="введите логин" id="username"
+                       name="username">
+            </div>
+            <div class="form-group">
+                <label for="password">Пароль:</label>
+                <input type="password" class="form-control" placeholder="введите пароль" id="password"
+                       name="password">
+            </div>
+            <div><button type="submit" class="btn btn-outline-primary"><i class="fa-solid fa-square-check"></i> ОК</button></div>
+        </div>
+    </form>
+</div>
+<div th:replace="fragments/footer::footer"></div>
+</body>
+</html>
